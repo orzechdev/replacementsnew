@@ -7,13 +7,28 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-  final List<Widget> _children = [Center(child: Text('Plan')), Center(child: Text('Zastępstwa')), Center(child: Text('Preferencje'))];
+  static List<String> _childrenTitles = [
+    'Plan',
+    'Zastępstwa',
+    'Preferencje',
+  ];
+  final List<Widget> _children = [
+    Center(
+      child: Text(_childrenTitles[0]),
+    ),
+    Center(
+      child: Text(_childrenTitles[1]),
+    ),
+    Center(
+      child: Text(_childrenTitles[2]),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Zastępstwa'),
+        title: Text(_childrenTitles[_currentIndex]),
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -22,15 +37,15 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
-            title: Text('Plan'),
+            title: Text(_childrenTitles[0]),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            title: Text('Zastępstwa'),
+            title: Text(_childrenTitles[1]),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.build),
-            title: Text('Preferencje'),
+            title: Text(_childrenTitles[2]),
           )
         ]
       ),
