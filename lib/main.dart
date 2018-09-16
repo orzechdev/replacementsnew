@@ -9,6 +9,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Zastępstwa',
       home: Home(),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Color(0xFF216CC7),
+        accentColor: Color(0xFF216CC7),
+      ),
     );
   }
 }

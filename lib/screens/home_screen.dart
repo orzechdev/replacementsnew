@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:replacements/widgets/replacements_list.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,9 +17,7 @@ class _HomeState extends State<Home> {
     Center(
       child: Text(_childrenTitles[0]),
     ),
-    Center(
-      child: Text(_childrenTitles[1]),
-    ),
+    ReplacementsList(),
     Center(
       child: Text(_childrenTitles[2]),
     ),
