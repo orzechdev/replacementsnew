@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:replacements/models/replacements_models.dart';
+import 'package:replacements/widgets/date_day_selector.dart';
 
 class ReplacementsList extends StatefulWidget {
   @override
@@ -27,84 +28,8 @@ class _ReplacementsListState extends State<ReplacementsList> {
       itemCount: _replacements == null ? 1 : _replacements.replacements.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _daysSinceSelected = -1;
-                    });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Wczoraj',
-                      style: TextStyle(
-                        fontSize: _daysSinceSelected == -1 ? 18.0 : 16.0,
-                        fontWeight: _daysSinceSelected == -1 ? FontWeight.w600 : FontWeight.w400,
-                        color: _daysSinceSelected == -1 ? Color(0xFF216CC7) : Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _daysSinceSelected = 0;
-                    });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Dzisiaj',
-                      style: TextStyle(
-                        fontSize: _daysSinceSelected == 0 ? 18.0 : 16.0,
-                        fontWeight: _daysSinceSelected == 0 ? FontWeight.w600 : FontWeight.w400,
-                        color: _daysSinceSelected == 0 ? Color(0xFF216CC7) : Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _daysSinceSelected = 1;
-                    });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Jutro',
-                      style: TextStyle(
-                        fontSize: _daysSinceSelected == 1 ? 18.0 : 16.0,
-                        fontWeight: _daysSinceSelected == 1 ? FontWeight.w600 : FontWeight.w400,
-                        color: _daysSinceSelected == 1 ? Color(0xFF216CC7) : Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _daysSinceSelected = 999;
-                    });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Data',
-                      style: TextStyle(
-                        fontSize: _daysSinceSelected < -1 || _daysSinceSelected > 1 ? 18.0 : 16.0,
-                        fontWeight: _daysSinceSelected < -1 || _daysSinceSelected > 1 ? FontWeight.w600 : FontWeight.w400,
-                        color: _daysSinceSelected < -1 || _daysSinceSelected > 1 ? Color(0xFF216CC7) : Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          return DateDaySelector(
+            onDateChanged: _changeDate,
           );
         }
         index -= 1;
@@ -114,5 +39,11 @@ class _ReplacementsListState extends State<ReplacementsList> {
         );
       },
     );
+  }
+
+  void _changeDate(DateTime dateTime) {
+    setState(() {
+
+    });
   }
 }

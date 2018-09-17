@@ -15,6 +15,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Used for format date string
+  intl: ^0.15.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
