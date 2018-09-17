@@ -1,29 +1,38 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:replacements/models/replacements_models.dart';
+import 'package:replacements/repository/models/data_model.dart';
+import 'package:replacements/repository/models/replacements_models.dart';
+import 'package:replacements/repository/repository.dart';
 import 'package:replacements/widgets/date_day_selector.dart';
 
 class ReplacementsList extends StatefulWidget {
+  ReplacementsModel replacements;
+  DataModel data;
+
+  ReplacementsList({
+    this.data,
+    this.replacements,
+  });
+
   @override
   State<StatefulWidget> createState() => _ReplacementsListState();
 }
 
 class _ReplacementsListState extends State<ReplacementsList> {
-  int _daysSinceSelected = 0;
-  final ReplacementsModel _replacements = ReplacementsModel(
-    [
-      ReplacementModel(1, 'abcd', 'repl 1', 1, 26, 44), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77),
-      ReplacementModel(1, 'abcd', 'repl 1', 1, 26, 44), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77),
-      ReplacementModel(1, 'abcd', 'repl 1', 1, 26, 44), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77),
-      ReplacementModel(1, 'abcd', 'repl 1', 1, 26, 44), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77),
-      ReplacementModel(1, 'abcd', 'repl 1', 1, 26, 44), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77), ReplacementModel(2, 'ffss', 'repl 2', 2, 38, 77),
-    ],
-    [
-      '133', '145'
-    ]
-  );
+  ReplacementsModel _replacements;
+  DataModel _data;
 
   @override
   Widget build(BuildContext context) {
+    if (_replacements == null) {
+      _replacements = widget.replacements;
+    }
+    if (_data == null) {
+      _data = widget.data;
+    }
+    if (_data != null && _replacements != null) {
+    }
     return ListView.builder(
       itemCount: _replacements == null ? 1 : _replacements.replacements.length + 1,
       itemBuilder: (context, index) {
@@ -34,8 +43,8 @@ class _ReplacementsListState extends State<ReplacementsList> {
         }
         index -= 1;
         return ListTile(
-          title: Text(_replacements.replacements[index].replacement),
-          subtitle: Text(_replacements.replacements[index].defaultInteger.toString()),
+          title: Text(findClass(_replacements.replacements[index]['class_number']) + _replacements.replacements[index]['replacement']),
+          subtitle: Text(findDefaultTeacher(_replacements.replacements[index]['default_integer'])),
         );
       },
     );
@@ -45,5 +54,23 @@ class _ReplacementsListState extends State<ReplacementsList> {
     setState(() {
 
     });
+  }
+
+  String findClass(id) {
+    for (var dataItem in _data.classes) {
+      if (id == dataItem['id']) {
+        return '${dataItem['name']} - ';
+      }
+    }
+    return '';
+  }
+
+  String findDefaultTeacher(id) {
+    for (var dataItem in _data.teachers) {
+      if (id == dataItem['id']) {
+        return 'Za ${dataItem['name']}';
+      }
+    }
+    return id.toString();
   }
 }
