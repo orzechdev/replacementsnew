@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:replacements/repository/models/data_model.dart';
 import 'package:replacements/repository/models/replacements_models.dart';
 import 'package:replacements/repository/repository.dart';
+import 'package:replacements/widgets/preference_list.dart';
 import 'package:replacements/widgets/replacements_list.dart';
 
 class Home extends StatefulWidget {
@@ -41,13 +42,14 @@ class _HomeState extends State<Home> {
         data: _data,
         replacements: _replacements,
       ),
-      Center(
-        child: Text(_childrenTitles[2]),
-      ),
+      PreferenceList(
+        data: _data,
+      )
     ];
     return Scaffold(
       appBar: AppBar(
         title: Text(_childrenTitles[_currentIndex]),
+        centerTitle: true,
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

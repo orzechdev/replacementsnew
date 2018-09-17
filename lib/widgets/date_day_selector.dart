@@ -73,7 +73,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
           ),
           GestureDetector(
             onTap: () {
-              selectDateFromPicker();
+              selectDateFromPicker(context);
             },
             child: _DateDaySelectorItem(
               isSelected: _selectedDate.isBefore(_todayDate.subtract(Duration(days: 1))) || _selectedDate.isAfter(_todayDate.add(Duration(days: 1))),
@@ -85,7 +85,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
     );
   }
 
-  Future<void> selectDateFromPicker() async {
+  Future<void> selectDateFromPicker(context) async {
     var selectedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
