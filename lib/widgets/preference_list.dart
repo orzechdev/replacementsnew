@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:replacements/repository/models/data_model.dart';
 
@@ -34,21 +34,27 @@ class PreferenceListState extends State<PreferenceList> {
           title: Text('Wybrane klasy'),
           subtitle: Text('Brak'),
           onTap: () {
-            selectPreferenceItems(context, 'classes');
+            _selectPreferenceItems(context, 'classes');
           },
         ),
         ListTile(
           title: Text('Wybrani nauczyciele'),
           subtitle: Text('Brak'),
           onTap: () {
-            selectPreferenceItems(context, 'teachers');
+            _selectPreferenceItems(context, 'teachers');
           },
-        )
+        ),
+        ListTile(
+          title: Text('Polityka Prywatności'),
+          onTap: () {
+            _openPrivacyPolicy();
+          },
+        ),
       ]
     );
   }
 
-  Future<void> selectPreferenceItems(context, type) async {
+  Future<void> _selectPreferenceItems(context, type) async {
     List<dynamic> dataAll;
     String title;
     if (type == 'classes') {
@@ -66,7 +72,7 @@ class PreferenceListState extends State<PreferenceList> {
           content: SingleChildScrollView(
             child: ListBody(
               children: dataAll.map((dynamic dataItem) {
-                return selectionListItem(dataItem);
+                return _selectionListItem(dataItem);
               }).toList(),
             ),
           ),
@@ -90,13 +96,22 @@ class PreferenceListState extends State<PreferenceList> {
     );
   }
 
-  CheckboxListTile selectionListItem(dynamic dataItem) {
+  CheckboxListTile _selectionListItem(DataItemModel dataItem) {
     return CheckboxListTile(
-      title: Text(dataItem['name']),
-      value: dataItem['selected'] != null ? dataItem['selected'] : false,
+      title: Text(dataItem.name),
+      value: dataItem.selected != null ? dataItem.selected == '1' ? true : false : false,
       onChanged: (value) {
-        print('${dataItem['id']} - ${value.toString()}');
+        print('${dataItem.id} - ${value.toString()}');
       },
     );
+  }
+
+  _openPrivacyPolicy() async {
+    const url = 'http://grovecode.pl/data/replacements-privacy.html';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

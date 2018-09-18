@@ -9,6 +9,8 @@ class App extends StatelessWidget {
 
   App() {
     repository = Repository();
+    repository.openDatabase();
+    // Database is never closed... TODO: todo or not todo...
   }
 
   @override

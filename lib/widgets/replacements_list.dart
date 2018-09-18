@@ -43,8 +43,8 @@ class _ReplacementsListState extends State<ReplacementsList> {
         }
         index -= 1;
         return ListTile(
-          title: Text(findClass(_replacements.replacements[index]['class_number']) + _replacements.replacements[index]['replacement']),
-          subtitle: Text(findDefaultTeacher(_replacements.replacements[index]['default_integer'])),
+          title: Text(findClass(_replacements.replacements[index].classNumber) + _replacements.replacements[index].replacement),
+          subtitle: Text(findDefaultTeacher(_replacements.replacements[index].defaultInteger)),
         );
       },
     );
@@ -58,8 +58,8 @@ class _ReplacementsListState extends State<ReplacementsList> {
 
   String findClass(id) {
     for (var dataItem in _data.classes) {
-      if (id == dataItem['id']) {
-        return '${dataItem['name']} - ';
+      if (id == dataItem.id) {
+        return '${dataItem.name} - ';
       }
     }
     return '';
@@ -67,8 +67,8 @@ class _ReplacementsListState extends State<ReplacementsList> {
 
   String findDefaultTeacher(id) {
     for (var dataItem in _data.teachers) {
-      if (id == dataItem['id']) {
-        return 'Za ${dataItem['name']}';
+      if (id == dataItem.id) {
+        return 'Za ${dataItem.name}';
       }
     }
     return id.toString();
