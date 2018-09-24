@@ -49,6 +49,25 @@ class _ReplacementsListState extends State<ReplacementsList> {
 //            height: 70.0,
 //            color: Color(0xFF216CC7),
 //          ),
+          leading: Container(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _replacements.replacements[index].number.toString(),
+                  style: TextStyle(
+                    fontSize: 26.0,
+                  ),
+                ),
+                Text(
+                  'lekcja',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                  ),
+                ),
+              ]
+            ),
+          ),
           title: Text(
             findClass(_replacements.replacements[index].classNumber) + _replacements.replacements[index].replacement,
             style: TextStyle(

@@ -1,5 +1,6 @@
 String privacyPolicyText = '''
-<h1 id="title">Privacy policy</h1>
+<h1>Privacy Policy</h1>
+
 
 <p>Effective date: September 18, 2018</p>
 
@@ -31,7 +32,7 @@ String privacyPolicyText = '''
 <p>This Usage Data may include information such as your computer's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
 <p>When you access the Service with a mobile device, this Usage Data may include information such as the type of mobile device you use, your mobile device unique ID, the IP address of your mobile device, your mobile operating system, the type of mobile Internet browser you use, unique device identifiers and other diagnostic data.</p>
 
-<h4>Tracking & Cookies Data</h4>
+<h4>Tracking &amp; Cookies Data</h4>
 <p>We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.</p>
 <p>Cookies are files with small amount of data which may include an anonymous unique identifier. Cookies are sent to your browser from a website and stored on your device. Tracking technologies also used are beacons, tags, and scripts to collect and track information and to improve and analyze our Service.</p>
 <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>
@@ -86,7 +87,7 @@ String privacyPolicyText = '''
         <li>
         <p><strong>Google Analytics</strong></p>
         <p>Google Analytics is a web analytics service offered by Google that tracks and reports website traffic. Google uses the data collected to track and monitor the use of our Service. This data is shared with other Google services. Google may use the collected data to contextualize and personalize the ads of its own advertising network.</p>
-                        <p>For more information on the privacy practices of Google, please visit the Google Privacy & Terms web page: <a href="https://policies.google.com/privacy?hl=en">https://policies.google.com/privacy?hl=en</a></p>
+                        <p>For more information on the privacy practices of Google, please visit the Google Privacy &amp; Terms web page: <a href="https://policies.google.com/privacy?hl=en">https://policies.google.com/privacy?hl=en</a></p>
     </li>
                             </ul>
 
@@ -104,8 +105,9 @@ String privacyPolicyText = '''
 
 <h2>Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-By email: tarasiukdawid@gmail.com
+<ul>
+        <li>By email: tarasiukdawid@gmail.com</li>
           
-                  <p>© 2018, Zastępstwa, Replacements, Tarasiuk Dawid</p>
+        </ul>                       
                   
 ''';
