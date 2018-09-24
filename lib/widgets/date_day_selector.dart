@@ -117,7 +117,7 @@ class _DateDaySelectorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12.0),
+      padding: EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 12.0),
       child: Text(
         title,
         style: TextStyle(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:replacements/repository/database/data.dart';
 import 'package:replacements/repository/database/replacements.dart';
-import 'package:replacements/repository/models/data_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 
