@@ -16,21 +16,30 @@ class PreferenceList extends StatefulWidget {
 
 class PreferenceListState extends State<PreferenceList> {
   DataModel _data;
+  bool _notificationsReplacements;
+  bool _notificationsSelectedTeachersClasses;
 
   @override
   Widget build(BuildContext context) {
     if (_data == null) {
       _data = widget.data;
     }
+    if (_notificationsSelectedTeachersClasses == null) {
+      _notificationsSelectedTeachersClasses = true;
+    }
+    if (_notificationsReplacements == null) {
+      _notificationsReplacements = true;
+    }
     return ListView(
       children: [
         ListTile(
-          title: Text('Powiadomienia o zastępstwach dla wybranych klas i nauczycieli'),
-          onTap: () {
-
-          },
+          title: Text(
+            'Personalizacja',
+            style: Theme.of(context).textTheme.subhead,
+          ),
         ),
         ListTile(
+          leading: Icon(Icons.group_work),
           title: Text('Wybrane klasy'),
           subtitle: Text('Brak'),
           onTap: () {
@@ -38,13 +47,41 @@ class PreferenceListState extends State<PreferenceList> {
           },
         ),
         ListTile(
+          leading: Icon(Icons.group),
           title: Text('Wybrani nauczyciele'),
           subtitle: Text('Brak'),
           onTap: () {
             _selectPreferenceItems(context, 'teachers');
           },
         ),
+        SwitchListTile(
+          secondary: Icon(Icons.notifications),
+          title: Text('Powiadomienia o zastępstwach'),
+          value: _notificationsReplacements,
+          onChanged: (bool value) {
+            setState(() {
+              _notificationsReplacements = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          secondary: Icon(Icons.notifications),
+          title: Text('Powiadomienia o zastępstwach tylko dla wybranych klas i nauczycieli'),
+          value: _notificationsSelectedTeachersClasses,
+          onChanged: (bool value) {
+            setState(() {
+              _notificationsSelectedTeachersClasses = value;
+            });
+          },
+        ),
         ListTile(
+          title: Text(
+            'Informacje',
+            style: Theme.of(context).textTheme.subhead,
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.assignment),
           title: Text('Polityka Prywatności'),
           onTap: () {
             _openPrivacyPolicy();
