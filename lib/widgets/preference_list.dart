@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:replacements/screens/privacy_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:replacements/repository/models/data_model.dart';
@@ -84,7 +85,7 @@ class PreferenceListState extends State<PreferenceList> {
           leading: Icon(Icons.assignment),
           title: Text('Polityka Prywatności'),
           onTap: () {
-            _openPrivacyPolicy();
+            _openPrivacyPolicy(context);
           },
         ),
       ]
@@ -143,12 +144,12 @@ class PreferenceListState extends State<PreferenceList> {
     );
   }
 
-  _openPrivacyPolicy() async {
-    const url = 'http://grovecode.pl/data/replacements-privacy.html';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  _openPrivacyPolicy(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PrivacyScreen(),
+      )
+    );
   }
 }
