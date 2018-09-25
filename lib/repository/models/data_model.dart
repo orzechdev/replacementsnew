@@ -45,6 +45,14 @@ class DataItemModel {
 
   DataItemModel(this.id, this.ver, this.name);
 
+  DataItemModel.clone(DataItemModel source) {
+    id = source.id;
+    ver = source.ver;
+    name = source.name;
+    type = source.type;
+    selected = source.selected;
+  }
+
   Map<String, dynamic> toMap({String setType: '0', String setSelected: '0'}) {
     var map = <String, dynamic>{
       'id': id,

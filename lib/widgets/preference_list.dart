@@ -93,13 +93,13 @@ class PreferenceListState extends State<PreferenceList> {
   }
 
   Future<void> _selectPreferenceItems(context, type) async {
-    List<dynamic> dataAll;
+    List<DataItemModel> dataAll = List();
     String title;
     if (type == 'classes') {
-      dataAll = _data.classes;
+      dataAll = _data.classes.map((item) => DataItemModel.clone(item)).toList();
       title = 'Wybieranie klas';
     } else if (type == 'teachers') {
-      dataAll = _data.teachers;
+      dataAll = _data.teachers.map((item) => DataItemModel.clone(item)).toList();
       title = 'Wybieranie nauczycieli';
     }
     await showDialog(
@@ -107,12 +107,8 @@ class PreferenceListState extends State<PreferenceList> {
       builder: (context) {
         return AlertDialog(
           title: Text(title),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: dataAll.map((dynamic dataItem) {
-                return _selectionListItem(dataItem);
-              }).toList(),
-            ),
+          content: ClassTeacherListDialogContent(
+            data: dataAll
           ),
           contentPadding: EdgeInsets.all(0.0),
           actions: <Widget>[
@@ -125,22 +121,19 @@ class PreferenceListState extends State<PreferenceList> {
             FlatButton(
               child: Text("ZAPISZ"),
               onPressed: () {
-
+                if (type == 'classes') {
+                  _data.classes = dataAll;
+                } else if (type == 'teachers') {
+                  _data.teachers = dataAll;
+                }
+                // TODO Saving data in the database and try send them to the server
+                // (better create service connecting with server in another thread)
+                Navigator.of(context).pop();
               },
             ),
           ],
         );
       }
-    );
-  }
-
-  CheckboxListTile _selectionListItem(DataItemModel dataItem) {
-    return CheckboxListTile(
-      title: Text(dataItem.name),
-      value: dataItem.selected != null ? dataItem.selected == '1' ? true : false : false,
-      onChanged: (value) {
-        print('${dataItem.id} - ${value.toString()}');
-      },
     );
   }
 
@@ -150,6 +143,54 @@ class PreferenceListState extends State<PreferenceList> {
       MaterialPageRoute(
         builder: (context) => PrivacyScreen(),
       )
+    );
+  }
+}
+
+class ClassTeacherListDialogContent extends StatefulWidget {
+  List<dynamic> data;
+
+  ClassTeacherListDialogContent({
+    this.data,
+  });
+
+  @override
+  State<StatefulWidget> createState() => ClassTeacherListDialogContentState();
+}
+
+class ClassTeacherListDialogContentState extends State<ClassTeacherListDialogContent> {
+  List<dynamic> _data;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_data == null) {
+      _data = widget.data;
+    }
+    return SingleChildScrollView(
+      child: ListBody(
+        children: _data.map((dynamic dataItem) {
+          return _selectionListItem(dataItem, _data);
+        }).toList(),
+      ),
+    );
+  }
+
+  CheckboxListTile _selectionListItem(DataItemModel dataItem, List<DataItemModel> data) {
+    return CheckboxListTile(
+      title: Text(dataItem.name),
+      value: dataItem.selected != null ? dataItem.selected == '1' ? true : false : false,
+      onChanged: (value) {
+        print('${dataItem.id} - ${value.toString()}');
+        setState(() {
+          dataItem.selected = dataItem.selected == '1' ? '0' : '1';
+//          data.forEach((DataItemModel dataItemFromAll) {
+//            if (dataItemFromAll.id == dataItem.id) {
+//              dataItemFromAll.selected = dataItem.selected;
+//              return;
+//            }
+//          });
+        });
+      },
     );
   }
 }
