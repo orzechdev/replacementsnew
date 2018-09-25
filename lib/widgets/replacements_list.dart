@@ -51,7 +51,7 @@ class _ReplacementsListState extends State<ReplacementsList> {
 //          ),
           leading: Container(
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   _replacements.replacements[index].number.toString(),

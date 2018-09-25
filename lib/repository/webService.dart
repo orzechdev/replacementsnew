@@ -26,6 +26,33 @@ Future<ReplacementsModel> fetchReplacements() async {
     return ReplacementsModel.fromMap(json.decode(response.body));
   } else {
     // If that response was not OK, throw an error.
-    throw Exception('Failed to load data');
+    throw Exception('Failed to load replacements');
   }
+}
+
+Future<bool> setProfile(String fcmToken, List<String> dataIds, bool notifyReplacements, bool notifyReplacementsJustForData) async {
+  List<String> modules;
+  if (notifyReplacements) {
+    modules.add('1');
+    dataIds = null;
+  }
+  if (notifyReplacementsJustForData) {
+    dataIds = null;
+  }
+  Map<String, dynamic> headers = {
+    'fcmToken': fcmToken,
+    'dataIds': dataIds,
+    'modules': modules,
+  };
+//  final response = await http.post('http://zschocianow.pl/replacement_gcm/setuser.php', headers: headers);
+//
+//  if (response.statusCode == 200) {
+//    // If server returns an OK response, parse the JSON
+//    print(response.body);
+//    return true;
+//  } else {
+//    // If that response was not OK, throw an error.
+//    throw Exception('Failed to set profile');
+//  }
+  return false;
 }

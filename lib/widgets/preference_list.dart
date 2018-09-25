@@ -4,11 +4,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:replacements/repository/models/data_model.dart';
 
+typedef void DataModelChangedCallback(DataModel dataModel);
+
 class PreferenceList extends StatefulWidget {
   DataModel data;
+  final DataModelChangedCallback onDataChanged;
+  final bool isInternetConnection;
 
   PreferenceList({
     this.data,
+    this.onDataChanged,
+    this.isInternetConnection,
   });
 
   @override
@@ -22,6 +28,18 @@ class PreferenceListState extends State<PreferenceList> {
 
   @override
   Widget build(BuildContext context) {
+    //_checkInternetConnection();
+    if (!widget.isInternetConnection) {
+      return Center(
+        child: Text(
+          'By zmienić preferencje konieczne jest połączenie internetowe',
+          style: TextStyle(
+            fontSize: 20.0,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
     if (_data == null) {
       _data = widget.data;
     }
@@ -42,7 +60,7 @@ class PreferenceListState extends State<PreferenceList> {
         ListTile(
           leading: Icon(Icons.group_work),
           title: Text('Wybrane klasy'),
-          subtitle: Text('Brak'),
+          subtitle: _createSubtitle(_data.classes),
           onTap: () {
             _selectPreferenceItems(context, 'classes');
           },
@@ -50,7 +68,7 @@ class PreferenceListState extends State<PreferenceList> {
         ListTile(
           leading: Icon(Icons.group),
           title: Text('Wybrani nauczyciele'),
-          subtitle: Text('Brak'),
+          subtitle: _createSubtitle(_data.teachers),
           onTap: () {
             _selectPreferenceItems(context, 'teachers');
           },
@@ -65,15 +83,18 @@ class PreferenceListState extends State<PreferenceList> {
             });
           },
         ),
-        SwitchListTile(
-          secondary: Icon(Icons.notifications),
-          title: Text('Powiadomienia o zastępstwach tylko dla wybranych klas i nauczycieli'),
-          value: _notificationsSelectedTeachersClasses,
-          onChanged: (bool value) {
-            setState(() {
-              _notificationsSelectedTeachersClasses = value;
-            });
-          },
+        Visibility (
+          visible: _notificationsReplacements,
+          child: SwitchListTile(
+            secondary: Icon(Icons.notifications),
+            title: Text('Powiadomienia o zastępstwach tylko dla wybranych klas i nauczycieli'),
+            value: _notificationsSelectedTeachersClasses,
+            onChanged: (bool value) {
+              setState(() {
+                _notificationsSelectedTeachersClasses = value;
+              });
+            },
+          ),
         ),
         ListTile(
           title: Text(
@@ -89,6 +110,20 @@ class PreferenceListState extends State<PreferenceList> {
           },
         ),
       ]
+    );
+  }
+
+  Widget _createSubtitle(List<DataItemModel> dataList) {
+    String subTitle = '';
+    String separator = '';
+    dataList.forEach((dataItemModel) {
+      if (dataItemModel.selected == '1') {
+        subTitle += separator + dataItemModel.name;
+        separator = ', ';
+      }
+    });
+    return Text(
+      subTitle == '' ? 'Brak' : subTitle,
     );
   }
 
@@ -126,8 +161,7 @@ class PreferenceListState extends State<PreferenceList> {
                 } else if (type == 'teachers') {
                   _data.teachers = dataAll;
                 }
-                // TODO Saving data in the database and try send them to the server
-                // (better create service connecting with server in another thread)
+                widget.onDataChanged(_data);
                 Navigator.of(context).pop();
               },
             ),

@@ -7,6 +7,7 @@ import 'package:replacements/repository/models/data_model.dart';
 import 'package:replacements/repository/models/replacements_models.dart';
 import 'package:replacements/repository/webService.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Repository {
   static final Repository _singleton = new Repository._internal();
@@ -15,17 +16,24 @@ class Repository {
   }
   Repository._internal();
 
-  openDatabase() async {
-    print('#### Repository openDatabase');
-    if (_databaseHelper == null) {
-      print('#### Repository openDatabase dataProvider is null');
-      _databaseHelper = DatabaseHelper();
-      await _databaseHelper.open(await getDatabasePath());
-      _dataProvider = _databaseHelper.getDataProvider();
-      _replacementsProvider = _databaseHelper.getReplacementsProvider();
-    }
+  openRepository() async {
+    var lock = Lock();
+    return await lock.synchronized(() async {
+      print('#### Repository openRepository');
+      if (_databaseHelper == null) {
+        sharedPreferences = await SharedPreferences.getInstance();
+        print('#### Repository openRepository dataProvider is null');
+        _databaseHelper = DatabaseHelper();
+        await _databaseHelper.open(await getDatabasePath());
+        _dataProvider = _databaseHelper.getDataProvider();
+        _replacementsProvider = _databaseHelper.getReplacementsProvider();
+        return true;
+      }
+      return true;
+    });
   }
 
+  SharedPreferences sharedPreferences;
   DatabaseHelper _databaseHelper;
   DataProvider _dataProvider;
   ReplacementsProvider _replacementsProvider;
@@ -35,21 +43,49 @@ class Repository {
   Future<DataModel> getData() async {
     var lock = Lock();
     return await lock.synchronized(() async {
+      print('#### Repository getData');
       if (_data == null) {
-        print('#### Repository getData data is null');
-        DataModel dataFetched = await fetchData();
-        print('#### Repository getData data is null 1');
-        int dataDeleted = await _dataProvider.deleteAll();
-        print('#### Repository getData data is null 2');
-        bool dataStored = await _dataProvider.insertAll(dataFetched);
-        print('#### Repository getData data is null 3');
+        print('#### Repository getData DB data is null');
         _data = await _dataProvider.getAllData();
-        print('#### Repository getData data is null 4');
-        return _data;
+        if (_data == null) {
+          print('#### Repository getData FETCH data is null');
+          DataModel dataFetched = await fetchData();
+          print('#### Repository getData FETCH data is null 1');
+          int dataDeleted = await _dataProvider.deleteAll();
+          print('#### Repository getData FETCH data is null 2');
+          bool dataStored = await _dataProvider.insertAll(dataFetched);
+          print('#### Repository getData FETCH data is null 3');
+          _data = await _dataProvider.getAllData();
+          print('#### Repository getData FETCH data is null 4');
+          return _data;
+        } else {
+          print('#### Repository getData DB data not null');
+          return _data;
+        }
       } else {
-        print('#### Repository getData data not null');
+        print('#### Repository getData data not null DB');
         return _data;
       }
+    });
+  }
+
+  Future<bool> setData(DataModel dataModel) async {
+    var lock = Lock();
+    return await lock.synchronized(() async {
+      print('#### Repository setData 1');
+      int dataDeleted = await _dataProvider.deleteAll();
+      print('#### Repository setData 2');
+      bool dataStored = await _dataProvider.insertAll(dataModel);
+      print('#### Repository setData 3');
+      sharedPreferences.setBool('todoUpdateProfile', true);
+      print('#### Repository setData 4');
+      String fcmToken = 'm9834mcb48fmff4f34f34';
+      List<String> dataIds = ['12', '14', '38'];
+      bool notifyReplacements = true;
+      bool notifyReplacementsJustForData = true;
+      print('#### Repository setData 5');
+      bool response = await setProfile(fcmToken, dataIds, notifyReplacements, notifyReplacementsJustForData);
+      print('#### Repository setData 6');
     });
   }
 
