@@ -39,6 +39,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               setState(() {
                 _selectedDate = _todayDate.subtract(Duration(days: 1));
@@ -50,6 +51,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
             ),
           ),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               setState(() {
                 _selectedDate = _todayDate;
@@ -61,6 +63,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
             ),
           ),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               setState(() {
                 _selectedDate = _todayDate.add(Duration(days: 1));
@@ -72,6 +75,7 @@ class _DateDaySelectorState extends State<DateDaySelector> {
             ),
           ),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               selectDateFromPicker(context);
             },
@@ -116,7 +120,7 @@ class _DateDaySelectorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 12.0),
       child: Text(
         title,
