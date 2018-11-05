@@ -7,6 +7,7 @@ import 'package:replacements/repository/repository.dart';
 import 'package:replacements/widgets/preference_list.dart';
 import 'package:replacements/widgets/replacements_list.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:replacements/widgets/schedule_webview.dart';
 
 class Home extends StatefulWidget {
   Repository repository;
@@ -77,16 +78,17 @@ class _HomeState extends State<Home> {
       return _showLoading();
     } else {
       List<Widget> _children = [
-        Center(
-          child: Text(_childrenTitles[0]),
-        ),
+//        Center(
+//          child: Text(_childrenTitles[0]),
+//        ),
+        ScheduleWebview(),
         ReplacementsList(
           data: _data,
           replacements: _replacements,
         ),
         PreferenceList(
           data: _data,
-          onDataChanged: _setDataInRepo,
+          onDataChanged: (dataModel, notifyReplacements, notifyReplacementsJustForData) => _setDataInRepo(context, dataModel, notifyReplacements, notifyReplacementsJustForData),
           isInternetConnection: _isInternetConnection,
         )
       ];
@@ -169,14 +171,35 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void _setDataInRepo(DataModel dataModel) async {
+  void _setDataInRepo(BuildContext context, DataModel dataModel, bool notifyReplacements, bool notifyReplacementsJustForData) async {
     var dataSavedInRepository;
     try {
-      dataSavedInRepository = await widget.repository.setData(dataModel);
+      Future<void> result = _showLoadingDialog(context);
+      dataSavedInRepository = await widget.repository.setData(dataModel, notifyReplacements, notifyReplacementsJustForData);
+      Navigator.of(context, rootNavigator: true).pop(result);
       print('_setDataInRepo: ' + dataSavedInRepository);
     } catch (e) {
       print(e);
       // TODO Handle error...
     }
+  }
+
+  Future<void> _showLoadingDialog(context) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Zapisywanie preferencji'),
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator()
+            ],
+          ),
+        );
+      }
+    );
   }
 }

@@ -31,7 +31,7 @@ Future<ReplacementsModel> fetchReplacements() async {
 }
 
 Future<bool> setProfile(String fcmToken, List<String> dataIds, bool notifyReplacements, bool notifyReplacementsJustForData) async {
-  List<String> modules;
+  List<String> modules = List();
   if (notifyReplacements) {
     modules.add('1');
     dataIds = null;

@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:replacements/repository/models/data_model.dart';
 
-typedef void DataModelChangedCallback(DataModel dataModel);
+typedef void DataModelChangedCallback(DataModel dataModel, bool notifyReplacements, bool notifyReplacementsJustForData);
 
 class PreferenceList extends StatefulWidget {
   DataModel data;
@@ -81,6 +81,7 @@ class PreferenceListState extends State<PreferenceList> {
             setState(() {
               _notificationsReplacements = value;
             });
+            widget.onDataChanged(null, _notificationsReplacements, _notificationsSelectedTeachersClasses);
           },
         ),
         Visibility (
@@ -93,6 +94,7 @@ class PreferenceListState extends State<PreferenceList> {
               setState(() {
                 _notificationsSelectedTeachersClasses = value;
               });
+              widget.onDataChanged(null, _notificationsReplacements, _notificationsSelectedTeachersClasses);
             },
           ),
         ),
@@ -145,7 +147,7 @@ class PreferenceListState extends State<PreferenceList> {
           content: ClassTeacherListDialogContent(
             data: dataAll
           ),
-          contentPadding: EdgeInsets.all(0.0),
+          contentPadding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
           actions: <Widget>[
             FlatButton(
               child: Text("ANULUJ"),
@@ -157,12 +159,16 @@ class PreferenceListState extends State<PreferenceList> {
               child: Text("ZAPISZ"),
               onPressed: () {
                 if (type == 'classes') {
-                  _data.classes = dataAll;
+                  setState(() {
+                    _data.classes = dataAll;
+                  });
                 } else if (type == 'teachers') {
-                  _data.teachers = dataAll;
+                  setState(() {
+                    _data.teachers = dataAll;
+                  });
                 }
-                widget.onDataChanged(_data);
                 Navigator.of(context).pop();
+                widget.onDataChanged(_data, _notificationsReplacements, _notificationsSelectedTeachersClasses);
               },
             ),
           ],

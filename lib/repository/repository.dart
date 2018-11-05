@@ -69,23 +69,29 @@ class Repository {
     });
   }
 
-  Future<bool> setData(DataModel dataModel) async {
+  Future<bool> setData(DataModel dataModel, bool notifyReplacements, bool notifyReplacementsJustForData) async {
     var lock = Lock();
     return await lock.synchronized(() async {
-      print('#### Repository setData 1');
-      int dataDeleted = await _dataProvider.deleteAll();
-      print('#### Repository setData 2');
-      bool dataStored = await _dataProvider.insertAll(dataModel);
+      if (dataModel == null) {
+        print('#### Repository setData 1-2');
+        dataModel = await _dataProvider.getAllData();
+      } else {
+        print('#### Repository setData 1');
+        int dataDeleted = await _dataProvider.deleteAll();
+        print('#### Repository setData 2');
+        bool dataStored = await _dataProvider.insertAll(dataModel);
+      }
       print('#### Repository setData 3');
       sharedPreferences.setBool('todoUpdateProfile', true);
       print('#### Repository setData 4');
       String fcmToken = 'm9834mcb48fmff4f34f34';
       List<String> dataIds = ['12', '14', '38'];
-      bool notifyReplacements = true;
-      bool notifyReplacementsJustForData = true;
+      //bool notifyReplacements = true;
+      //bool notifyReplacementsJustForData = true;
       print('#### Repository setData 5');
       bool response = await setProfile(fcmToken, dataIds, notifyReplacements, notifyReplacementsJustForData);
       print('#### Repository setData 6');
+      return response;
     });
   }
 
