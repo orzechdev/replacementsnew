@@ -85,9 +85,15 @@ class Repository {
       sharedPreferences.setBool('todoUpdateProfile', true);
       print('#### Repository setData 4');
       String fcmToken = 'm9834mcb48fmff4f34f34';
-      List<String> dataIds = ['12', '14', '38'];
-      //bool notifyReplacements = true;
-      //bool notifyReplacementsJustForData = true;
+
+      List<String> dataIds = [];
+      dataModel.classes.where((dataItemModel) => dataItemModel.selected == '1').forEach((dataItemModel) => {
+        dataIds.add(dataItemModel.id)
+      });
+      dataModel.teachers.where((dataItemModel) => dataItemModel.selected == '1').forEach((dataItemModel) => {
+        dataIds.add(dataItemModel.id)
+      });
+
       print('#### Repository setData 5');
       bool response = await setProfile(fcmToken, dataIds, notifyReplacements, notifyReplacementsJustForData);
       print('#### Repository setData 6');

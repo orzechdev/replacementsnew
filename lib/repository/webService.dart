@@ -33,26 +33,41 @@ Future<ReplacementsModel> fetchReplacements() async {
 Future<bool> setProfile(String fcmToken, List<String> dataIds, bool notifyReplacements, bool notifyReplacementsJustForData) async {
   List<String> modules = List();
   if (notifyReplacements) {
+    print('#### WebService setProfile notifyReplacements');
     modules.add('1');
-    dataIds = null;
+    if (!notifyReplacementsJustForData) {
+      print('#### WebService setProfile NOT notifyReplacementsJustForData');
+      dataIds.clear();
+    }
   }
-  if (notifyReplacementsJustForData) {
-    dataIds = null;
+
+  String modulesString = '';
+  for (var i=0; i<modules.length; i++) {
+    String delimiter = modulesString == '' ? '' : ',';
+    modulesString += delimiter + modules[i];
   }
-  Map<String, dynamic> headers = {
+  String dataIdsString = '';
+  for (var i=0; i<dataIds.length; i++) {
+    String delimiter = dataIdsString == '' ? '' : ',';
+    dataIdsString += delimiter + dataIds[i];
+  }
+
+  Map<String, String> headers = {
     'fcmToken': fcmToken,
-    'dataIds': dataIds,
-    'modules': modules,
+    'dataIds': dataIdsString,
+    'modules': modulesString,
   };
-//  final response = await http.post('http://zschocianow.pl/replacement_gcm/setuser.php', headers: headers);
-//
-//  if (response.statusCode == 200) {
-//    // If server returns an OK response, parse the JSON
-//    print(response.body);
-//    return true;
-//  } else {
-//    // If that response was not OK, throw an error.
-//    throw Exception('Failed to set profile');
-//  }
+  print('#### WebService setProfile $headers');
+  final response = await http.post('http://zschocianow.pl/replacement_gcm/setuser.php', body: headers);
+
+  if (response.statusCode == 200) {
+    // If server returns an OK response, parse the JSON
+    print(response.body);
+    return true;
+  } else {
+    print(response.body);
+    // If that response was not OK, throw an error.
+    throw Exception('Failed to set profile');
+  }
   return false;
 }
